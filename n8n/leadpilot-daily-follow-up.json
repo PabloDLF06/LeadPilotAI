@@ -1,0 +1,16 @@
+{
+  "name": "LeadPilot — Recordatorio Diario",
+  "active": false,
+  "settings": { "executionOrder": "v1", "timezone": "Europe/Madrid" },
+  "nodes": [
+    { "id": "e8d6dbe4-02f9-40e5-8b0d-88f5780059e4", "name": "Daily at 09:00 Europe Madrid", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.4, "position": [0, 0], "parameters": { "rule": { "interval": [{ "field": "cronExpression", "expression": "0 9 * * *" }] } } },
+    { "id": "be1ab5d0-b874-43c7-8262-b15363144dd2", "name": "Fetch due follow-ups", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.3, "position": [224, 0], "parameters": { "method": "GET", "url": "={{ $env.LEADPILOT_APP_URL + \"/api/internal/follow-ups/due\" }}", "sendHeaders": true, "specifyHeaders": "keypair", "headerParameters": { "parameters": [{ "name": "Authorization", "value": "={{ \"Bearer \" + $env.INTERNAL_AUTOMATION_SECRET }}" }, { "name": "Accept", "value": "application/json" }] }, "options": { "response": { "response": { "responseFormat": "json", "neverError": false } }, "timeout": 5000 } } },
+    { "id": "568ed37a-a223-4d27-b8c1-fef6882dd257", "name": "Build follow-up summary", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [448, 0], "parameters": { "mode": "runOnceForAllItems", "language": "javaScript", "jsCode": "const body = $input.first().json;\nconst items = Array.isArray(body.items) ? body.items : [];\nif (!items.length) return [];\nreturn [{ json: { message: 'Tienes ' + items.length + ' leads pendientes de seguimiento.', items } }];" } },
+    { "id": "ade269c2-0e60-4627-8125-3961467a2e52", "name": "Telegram daily follow-up alert", "type": "n8n-nodes-base.telegram", "typeVersion": 1.2, "position": [672, 0], "parameters": { "resource": "message", "operation": "sendMessage", "chatId": "={{ $env.TELEGRAM_DEFAULT_CHAT_ID }}", "text": "={{ $json.message + \"\\n\\n\" + $json.items.map(item => item.name + \" · score \" + item.score + \" · \" + item.age_days + \" días · \" + item.dashboard_url).join(\"\\n\") }}" } }
+  ],
+  "connections": {
+    "Daily at 09:00 Europe Madrid": { "main": [[{ "node": "Fetch due follow-ups", "type": "main", "index": 0 }]] },
+    "Fetch due follow-ups": { "main": [[{ "node": "Build follow-up summary", "type": "main", "index": 0 }]] },
+    "Build follow-up summary": { "main": [[{ "node": "Telegram daily follow-up alert", "type": "main", "index": 0 }]] }
+  }
+}
