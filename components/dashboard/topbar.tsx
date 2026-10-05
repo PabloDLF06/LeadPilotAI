@@ -1,0 +1,9 @@
+"use client";
+
+import { Bell, Menu, Search } from "lucide-react";
+
+import { BrandMark } from "@/components/shared/brand-mark";
+
+export function Topbar({ onMenu }: { onMenu: () => void }) {
+  return <header className="sticky top-0 z-30 flex h-[76px] items-center justify-between border-b border-slate-200/80 bg-white/90 px-5 backdrop-blur lg:px-8"><div className="flex items-center gap-3"><button onClick={onMenu} className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden" aria-label="Abrir menú"><Menu className="h-5 w-5" aria-hidden="true" /></button><div className="lg:hidden"><BrandMark compact /></div><div className="hidden items-center gap-2 text-sm text-slate-400 lg:flex"><span>Workspace</span><span>/</span><span className="font-semibold text-slate-700">Resumen</span></div></div><div className="flex items-center gap-2 sm:gap-4"><button className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-500 transition hover:border-slate-300 hover:text-slate-800 sm:flex" aria-label="Buscar"><Search className="h-4 w-4" aria-hidden="true" />Buscar<span className="rounded border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] text-slate-400">⌘ K</span></button><button className="relative rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900" aria-label="Notificaciones"><Bell className="h-5 w-5" aria-hidden="true" /><span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-rose-500" /></button><div className="hidden h-6 w-px bg-slate-200 sm:block" /><div className="flex items-center gap-2.5"><span className="hidden text-right sm:block"><span className="block text-xs font-bold text-slate-800">Nova Growth</span><span className="block text-[11px] text-slate-400">Workspace demo</span></span><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-100 text-xs font-bold text-indigo-700">NG</span></div></div></header>;
+}

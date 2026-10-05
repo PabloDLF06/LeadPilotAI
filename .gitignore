@@ -1,0 +1,47 @@
+node_modules/
+.next/
+out/
+coverage/
+dist/
+*.log
+*.tsbuildinfo
+
+# Local configuration and secrets.
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Supabase local state and generated branches.
+supabase/.temp/
+supabase/.branches/
+
+# Vercel and local tooling.
+.vercel/
+.mcp.local.json
+.turbo/
+
+# Operating systems and editors.
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+
+# Backups, credentials and database artifacts.
+backups/
+*.sql.gz
+*.dump
+*.pem
+*.key
+*.p12
+*.sqlite
+*.sqlite3
+*.db
+
+# n8n local data and environment files.
+n8n/.env
+n8n/data/
+n8n/backups/
+n8n/.n8n/
